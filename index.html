@@ -11,21 +11,27 @@
       font-family: Arial, sans-serif;
       background: url('./images/bg.png') no-repeat center center fixed;
       background-size: cover;
+      color: #333;
     }
     
-    /* Style for the profile container */
-    .profile-container {
+    /* Center content container */
+    .container {
       max-width: 800px;
-      margin: 100px auto;
-      background-color: rgba(255, 255, 255, 0.8);
+      margin: 50px auto;
+      background-color: rgba(255, 255, 255, 0.9);
       padding: 20px;
       border-radius: 10px;
-      display: flex;
-      align-items: center;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
     
-    /* Style for the round profile image */
+    /* Profile header styling */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    /* Round profile image */
     .profile-image {
       width: 100px;
       height: 100px;
@@ -35,28 +41,92 @@
       border: 2px solid #ddd;
     }
     
-    /* Style for profile info */
+    /* Profile info styling */
     .profile-info h1 {
       margin: 0;
       font-size: 2em;
-      color: #333;
     }
     
     .profile-info p {
       margin: 5px 0 0;
       font-size: 1.2em;
-      color: #555;
+    }
+    
+    /* Profile content block for senior software engineer info */
+    .profile-content {
+      line-height: 1.6;
+    }
+    
+    .profile-content section {
+      margin-bottom: 20px;
+    }
+    
+    .profile-content h2 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+    
+    .profile-content ul {
+      list-style: disc;
+      margin-left: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="profile-container">
-    <!-- Round profile picture -->
-    <img src="./images/head.png" alt="Profile Picture" class="profile-image" />
-    <!-- Name and region information -->
-    <div class="profile-info">
-      <h1>Lem_C</h1>
-      <p>Region: CN</p>
+  <div class="container">
+    <!-- Profile header block -->
+    <div class="profile-header">
+      <img src="./images/head.png" alt="Profile Picture" class="profile-image" />
+      <div class="profile-info">
+        <h1>Lem_C</h1>
+        <p>Region: CN</p>
+      </div>
+    </div>
+    
+    <!-- Profile content block with random senior software engineer info -->
+    <div class="profile-content">
+      <section>
+        <h2>About Me</h2>
+        <p>
+          Senior Software Engineer with over 10 years of experience in designing, developing, and maintaining highly scalable applications. Passionate about leveraging the latest technologies to solve real-world problems.
+        </p>
+      </section>
+      
+      <section>
+        <h2>Technical Skills</h2>
+        <ul>
+          <li>Proficient in Java, Python, and JavaScript.</li>
+          <li>Experience with cloud platforms such as AWS and Azure.</li>
+          <li>Expertise in microservices architecture and containerization (Docker, Kubernetes).</li>
+          <li>Familiarity with front-end frameworks like React and Angular.</li>
+          <li>Strong background in RESTful API development and database design (MySQL, PostgreSQL, MongoDB).</li>
+        </ul>
+      </section>
+      
+      <section>
+        <h2>Professional Experience</h2>
+        <p>
+          Throughout my career, I have led cross-functional teams and delivered projects ranging from enterprise web applications to mobile solutions. I have a solid track record of mentoring junior engineers and driving continuous improvement.
+        </p>
+      </section>
+      
+      <section>
+        <h2>Projects & Achievements</h2>
+        <ul>
+          <li>Designed and implemented a real-time analytics platform that increased data processing speed by 40%.</li>
+          <li>Developed a microservice-based architecture that improved system scalability and fault tolerance.</li>
+          <li>Championed code quality initiatives resulting in a 30% reduction in bugs reported post-release.</li>
+        </ul>
+      </section>
+      
+      <section>
+        <h2>Interests</h2>
+        <p>
+          In my spare time, I enjoy exploring new programming languages, contributing to open-source projects, and attending tech meetups and conferences.
+        </p>
+      </section>
     </div>
   </div>
 </body>
