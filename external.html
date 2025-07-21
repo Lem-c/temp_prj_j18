@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>External HTML Page</title>
+  <link rel="stylesheet" href="css/external.css" />
+</head>
+
+<body>
+  <!-- Large title -->
+  <h1>Welcome to My Profile</h1>
+  
+  <!-- Clock display section -->
+  <div class="clock-container">
+    <div class="clock">
+      <span class="label">UK (London):</span>
+      <span id="uk-time">--:--:--</span>
+    </div>
+    <div class="clock">
+      <span class="label">USA (New York):</span>
+      <span id="us-time">--:--:--</span>
+    </div>
+    <div class="clock">
+      <span class="label">China (Beijing):</span>
+      <span id="cn-time">--:--:--</span>
+    </div>
+  </div>
+
+  <!-- Button to navigate back to the index page -->
+  <button onclick="window.location.href='index.html'">Go to Index Page</button>
+
+  <!-- Footer section -->
+  <footer>
+    <p>&copy; 2025 My Profile Page</p>
+  </footer>
+
+  <script>
+    function updateClocks() {
+      const now = new Date();
+      
+      // Options for formatting the time output
+      const options = { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit', 
+        hour12: false 
+      };
+      
+      // Get times for different time zones using Intl.DateTimeFormat
+      const ukTime = new Intl.DateTimeFormat('en-GB', {
+        ...options,
+        timeZone: 'Europe/London'
+      }).format(now);
+
+      const usTime = new Intl.DateTimeFormat('en-US', {
+        ...options,
+        timeZone: 'America/New_York'
+      }).format(now);
+
+      const cnTime = new Intl.DateTimeFormat('zh-CN', {
+        ...options,
+        timeZone: 'Asia/Shanghai'
+      }).format(now);
+      
+      // Display the times in the respective elements
+      document.getElementById("uk-time").textContent = ukTime;
+      document.getElementById("us-time").textContent = usTime;
+      document.getElementById("cn-time").textContent = cnTime;
+    }
+    
+    // Update clocks every second
+    setInterval(updateClocks, 1000);
+    // Initial call to set the clocks immediately
+    updateClocks();
+  </script>
+</body>
+</html>
