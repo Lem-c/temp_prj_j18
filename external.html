@@ -5,6 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>External HTML Page</title>
   <link rel="stylesheet" href="css/external.css" />
+  <style>
+    /* Additional styling for the login section */
+    .login-container {
+      margin: 40px auto;
+      padding: 20px;
+      max-width: 300px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5em;
+      color: #333;
+    }
+    .login-container label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .login-container input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .login-btn {
+      background-color: #28a745;
+      color: #fff;
+    }
+    .login-btn:hover {
+      background-color: #218838;
+    }
+    .register-btn {
+      background-color: #007BFF;
+      color: #fff;
+    }
+    .register-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 
 <body>
@@ -25,6 +78,25 @@
       <span class="label">China (Beijing):</span>
       <span id="cn-time">--:--:--</span>
     </div>
+  </div>
+
+  <!-- Login Section -->
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm" action="" method="post">
+      <label for="userId">User ID</label>
+      <input type="text" id="userId" name="userId" required placeholder="Enter your user ID" />
+
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" name="password" required placeholder="Enter your password" />
+
+      <!-- Login button -->
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+    <!-- Register button - Click navigates to register.html -->
+    <button type="button" class="register-btn" onclick="window.location.href='register.html'">
+      Register
+    </button>
   </div>
 
   <!-- Button to navigate back to the index page -->
