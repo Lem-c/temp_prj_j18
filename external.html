@@ -3,68 +3,79 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>External HTML Page</title>
+  <meta name="description" content="User profile page after registration. View your information. Additional Information can be edited." />
+  <title>My Profile</title>
   <link rel="stylesheet" href="css/external.css" />
   <style>
-    /* Additional styling for the login section */
-    .login-container {
-      margin: 40px auto;
-      padding: 20px;
-      max-width: 300px;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .login-container h2 {
+    h1 {
       text-align: center;
       margin-bottom: 20px;
-      font-size: 1.5em;
-      color: #333;
     }
-    .login-container label {
-      display: block;
-      margin-bottom: 5px;
+    /* Clock styling */
+    .clock-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .clock {
+      font-size: 1.2em;
+      margin: 5px;
+    }
+    .label {
       font-weight: bold;
+      margin-right: 5px;
     }
-    .login-container input {
-      width: 100%;
-      padding: 8px;
+    /* Containers for profile info */
+    .profile-info, .editable-info {
+      background: #fff;
+      padding: 20px;
+      margin: 0 auto 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .profile-info h2, .editable-info h2 {
+      margin-top: 0;
+    }
+    .profile-field, .edit-field {
       margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
     }
-    .login-container button {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: none;
-      border-radius: 4px;
-      font-size: 1em;
+    .profile-field span.value, .edit-display {
+      font-weight: normal;
+      margin-left: 10px;
+      min-width: 200px;
+      display: inline-block;
+    }
+    .edit-field label {
+      font-weight: bold;
+      display: inline-block;
+      width: 120px;
+    }
+    .edit-icon {
+      width: 16px;
+      vertical-align: middle;
       cursor: pointer;
+      margin-left: 5px;
     }
-    .login-btn {
-      background-color: #28a745;
-      color: #fff;
+    /* Hide input controls by default */
+    .edit-input {
+      display: none;
+      margin-left: 10px;
     }
-    .login-btn:hover {
-      background-color: #218838;
+    /* Error message styling */
+    .error-msg {
+      color: red;
+      font-size: 0.85em;
+      display: block;
+      margin-top: 3px;
     }
-    .register-btn {
-      background-color: #007BFF;
-      color: #fff;
-    }
-    .register-btn:hover {
-      background-color: #0056b3;
-    }
+    /* Hobbies container styling */
   </style>
 </head>
-
 <body>
-  <!-- Large title -->
+  <!-- Page Title -->
   <h1>Welcome to My Profile</h1>
   
-  <!-- Clock display section -->
+  <!-- Clock display section (optional) -->
   <div class="clock-container">
     <div class="clock">
       <span class="label">UK (London):</span>
@@ -79,72 +90,250 @@
       <span id="cn-time">--:--:--</span>
     </div>
   </div>
-
-  <!-- Login Section -->
-  <div class="login-container">
-    <h2>Login</h2>
-    <form id="loginForm" action="" method="post">
-      <label for="userId">User ID</label>
-      <input type="text" id="userId" name="userId" required placeholder="Enter your user ID" />
-
-      <label for="loginPassword">Password</label>
-      <input type="password" id="loginPassword" name="password" required placeholder="Enter your password" />
-
-      <!-- Login button -->
-      <button type="submit" class="login-btn">Login</button>
-    </form>
-    <!-- Register button - Click navigates to register.html -->
-    <button type="button" class="register-btn" onclick="window.location.href='register.html'">
-      Register
-    </button>
+  
+  <!-- Registered User's Main Info (fixed, non-editable) -->
+  <div class="profile-info">
+    <h2>User Information</h2>
+    <!-- User Name -->
+    <div class="edit-field" id="username-field">
+      <label>User Name:</label>
+      <span class="edit-display" id="username-display">Lem-C</span>
+      <img src="./images/edit.png" class="edit-icon" alt="Edit" onclick="toggleEdit('username')">
+      <input type="text" id="username-input" class="edit-input" required placeholder="Enter your username" onkeydown="handleKeyDown(event, 'username')">
+      <span class="error-msg" id="username-error"></span>
+    </div>
+    <!-- Email -->
+    <div class="edit-field" id="email-field">
+      <label>Email:</label>
+      <span class="edit-display" id="email-display">cccccyh6048@gamil.com</span>
+      <img src="./images/edit.png" class="edit-icon" alt="Edit" onclick="toggleEdit('email')">
+      <input type="email" id="email-input" class="edit-input" required placeholder="example@domain.com" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" onkeydown="handleKeyDown(event, 'email')">
+      <span class="error-msg" id="email-error"></span>
+    </div>
+    <!-- Sex (editable dropdown) -->
+    <div class="edit-field" id="sex-field">
+      <label>Sex:</label>
+      <span class="edit-display" id="sex-display">Male</span>
+      <img src="./images/edit.png" class="edit-icon" alt="Edit" onclick="toggleEdit('sex')">
+      <div id="sex-input" class="edit-input">
+        <label><input type="radio" name="sex" value="male" checked onkeydown="handleKeyDown(event, 'sex')"> Male</label>
+        <label><input type="radio" name="sex" value="female" onkeydown="handleKeyDown(event, 'sex')"> Female</label>
+      </div>
+      <span class="error-msg" id="sex-error"></span>
+    </div>
   </div>
-
-  <!-- Button to navigate back to the index page -->
-  <button onclick="window.location.href='index.html'">Go to Index Page</button>
-
-  <!-- Footer section -->
-  <footer>
+  
+  <!-- Editable Additional Information Section -->
+  <div class="editable-info">
+    <h2>Additional Information</h2>
+    
+    <!-- Age -->
+    <div class="edit-field" id="age-field">
+      <label>Age:</label>
+      <span class="edit-display" id="age-display"></span>
+      <img src="./images/edit.png" class="edit-icon" alt="Edit" onclick="toggleEdit('age')">
+      <input type="number" id="age-input" class="edit-input" min="1" max="100" placeholder="Enter age (1-100)" onblur="saveField('age')">
+      <span class="error-msg" id="age-error"></span>
+    </div>
+    
+    <!-- Address -->
+    <div class="edit-field" id="address-field">
+      <label>Address:</label>
+      <span class="edit-display" id="address-display"></span>
+      <img src="./images/edit.png" class="edit-icon" alt="Edit" onclick="toggleEdit('address')">
+      <input type="text" id="address-input" class="edit-input" placeholder="Enter your address" onblur="saveField('address')">
+      <span class="error-msg" id="address-error"></span>
+    </div>
+    
+    <!-- City -->
+    <div class="edit-field" id="city-field">
+      <label>City:</label>
+      <span class="edit-display" id="city-display"></span>
+      <img src="./images/edit.png" class="edit-icon" alt="Edit" onclick="toggleEdit('city')">
+      <select id="city-input" class="edit-input" onblur="saveField('city')">
+        <option value="">Select City</option>
+        <option value="Xi'an">Xi'an</option>
+        <option value="Guangzhou">Guangzhou</option>
+        <option value="Shenzhen">Shenzhen</option>
+        <option value="Shanghai">Shanghai</option>
+      </select>
+      <span class="error-msg" id="city-error"></span>
+    </div>
+    
+    <!-- Postcode -->
+    <div class="edit-field" id="postcode-field">
+      <label>Postcode:</label>
+      <span class="edit-display" id="postcode-display"></span>
+      <img src="./images/edit.png" class="edit-icon" alt="Edit" onclick="toggleEdit('postcode')">
+      <input type="text" id="postcode-input" class="edit-input" placeholder="Enter at least 6 digits" pattern="\\d{6,}" onblur="saveField('postcode')">
+      <span class="error-msg" id="postcode-error"></span>
+    </div>
+    
+    <!-- Hobbies -->
+    <div class="edit-field" id="hobbies-field">
+      <label>Hobbies:</label>
+      <span class="edit-display" id="hobbies-display"></span>
+      <img src="./images/edit.png" class="edit-icon" alt="Edit" onclick="toggleEdit('hobbies')">
+      <div id="hobbies-input" class="edit-input hobbies-options">
+        <label><input type="checkbox" value="jogging">Jogging</label>
+        <label><input type="checkbox" value="photography">Photography</label>
+        <label><input type="checkbox" value="gym">Gym</label>
+        <label><input type="checkbox" value="basketball">Basketball</label>
+        <label><input type="checkbox" value="music">Music</label>
+        <br>
+        <button type="button" onclick="saveField('hobbies')">Save</button>
+      </div>
+      <span class="error-msg" id="hobbies-error"></span>
+    </div>
+  </div>
+  
+  <!-- Navigation Button -->
+  <div style="text-align:center; margin-top:20px;">
+    <button onclick="window.location.href='index.html'">Go to Index Page</button>
+  </div>
+  
+  <!-- Footer -->
+  <footer style="text-align:center; margin-top:20px;">
     <p>&copy; 2025 My Profile Page</p>
   </footer>
-
+  
   <script>
+    // Update clock values every second.
     function updateClocks() {
       const now = new Date();
-      
-      // Options for formatting the time output
-      const options = { 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit', 
-        hour12: false 
-      };
-      
-      // Get times for different time zones using Intl.DateTimeFormat
-      const ukTime = new Intl.DateTimeFormat('en-GB', {
-        ...options,
-        timeZone: 'Europe/London'
-      }).format(now);
-
-      const usTime = new Intl.DateTimeFormat('en-US', {
-        ...options,
-        timeZone: 'America/New_York'
-      }).format(now);
-
-      const cnTime = new Intl.DateTimeFormat('zh-CN', {
-        ...options,
-        timeZone: 'Asia/Shanghai'
-      }).format(now);
-      
-      // Display the times in the respective elements
+      const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+      const ukTime = new Intl.DateTimeFormat('en-GB', { ...options, timeZone: 'Europe/London' }).format(now);
+      const usTime = new Intl.DateTimeFormat('en-US', { ...options, timeZone: 'America/New_York' }).format(now);
+      const cnTime = new Intl.DateTimeFormat('zh-CN', { ...options, timeZone: 'Asia/Shanghai' }).format(now);
       document.getElementById("uk-time").textContent = ukTime;
       document.getElementById("us-time").textContent = usTime;
       document.getElementById("cn-time").textContent = cnTime;
     }
-    
-    // Update clocks every second
     setInterval(updateClocks, 1000);
-    // Initial call to set the clocks immediately
     updateClocks();
+    
+    function handleKeyDown(event, field) {
+      if (event.key === "Enter") {
+        saveEmailField(field);
+        saveField(field);
+      }
+    }
+
+    // Updated saveField function to include username and email validation
+    function saveEmailField(field) {
+      const displayElem = document.getElementById(field + "-display");
+      const inputElem = document.getElementById(field + "-input");
+      const errorElem = document.getElementById(field + "-error");
+      let value = inputElem.value;
+
+      // Validate required fields
+      if (value === "") {
+        errorElem.textContent = "This field is required.";
+        inputElem.focus();
+        return;
+      }
+
+      // Email format validation
+      if (field === "email") {
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailPattern.test(value)) {
+          errorElem.textContent = "Please enter a valid email (e.g., example@domain.com).";
+          inputElem.focus();
+          return;
+        }
+      }
+
+      // Update display and hide input
+      displayElem.textContent = value;
+      inputElem.style.display = "none";
+      displayElem.style.display = "inline-block";
+      errorElem.textContent = "";
+    }
+
+    // Toggle edit mode for a given field.
+    function toggleEdit(field) {
+      const displayElem = document.getElementById(field + "-display");
+      const inputElem = document.getElementById(field + "-input");
+      
+      // Check if elements exist
+      if (!displayElem || !inputElem) {
+        console.error(`Elements for field '${field}' not found.`);
+        return;
+      }
+      
+      // Hide display element, show input control.
+      displayElem.style.display = "none";
+      
+      // Handle different input types (text, email, select)
+      if (field === 'hobbies') {
+        inputElem.style.display = "block";
+      } else if (field === 'sex') {
+        inputElem.style.display = "inline-block";
+        // Set the radio button to match the current display
+        const currentValue = displayElem.textContent.toLowerCase();
+        const radio = inputElem.querySelector(`input[value="${currentValue}"]`);
+        if (radio) radio.checked = true;
+      }else {
+        inputElem.style.display = "inline-block";
+      }
+      
+      // Focus the input element
+      if (inputElem.focus) inputElem.focus();
+    }
+    
+    // Validate and save the field value, displaying inline error messages as needed.
+    function saveField(field) {
+      const displayElem = document.getElementById(field + "-display");
+      const inputElem = document.getElementById(field + "-input");
+      const errorElem = document.getElementById(field + "-error");
+      let value = "";
+      
+      if (field === "hobbies") {
+        const checkboxes = inputElem.querySelectorAll("input[type='checkbox']");
+        let selected = [];
+        checkboxes.forEach(chk => {
+          if (chk.checked) { selected.push(chk.value); }
+        });
+        value = selected.join(", ");
+      } 
+      else if (field === "sex") {
+        const selectedRadio = inputElem.querySelector("input[name='sex']:checked");
+        value = selectedRadio ? selectedRadio.value : "";
+      } 
+      else if (field === "city") {
+        value = inputElem.value;
+      } else {
+        value = inputElem.value;
+      }
+      
+      // Inline validations
+      if (field === "postcode" && value !== "") {
+        const postcodePattern = /^\d{6,}$/;
+        if (!postcodePattern.test(value)) {
+          errorElem.textContent = "Postcode must contain at least 6 digits.";
+          inputElem.focus();
+          return;
+        } else {
+          errorElem.textContent = "";
+        }
+      }
+      
+      if (field === "age" && value !== "") {
+        const ageNum = parseInt(value, 10);
+        if (ageNum < 1 || ageNum > 100) {
+          errorElem.textContent = "Age must be between 1 and 100.";
+          inputElem.focus();
+          return;
+        } else {
+          errorElem.textContent = "";
+        }
+      }
+      
+      // Update display text and hide input control if no error.
+      displayElem.textContent = value;
+      inputElem.style.display = "none";
+      displayElem.style.display = "inline-block";
+    }
   </script>
 </body>
 </html>

@@ -89,6 +89,7 @@
         id="password" 
         name="password" 
         required 
+        placeholder="e.g. 1234567890&$_abz"
         pattern="[a-z0-9$_&]+"
         title="Password can only contain lowercase letters, numbers, $, _ and &." />
 
@@ -101,6 +102,11 @@
         required 
         pattern="[a-z0-9$_&]+"
         title="Password can only contain lowercase letters, numbers, $, _ and &." />
+
+      <!-- Error message placeholder for password mismatch -->
+      <div id="error_match" class="error-message">Passwords do not match.</div>
+      <div id="error_invalid" class="error-message">Passwords should be at least 8 characters long and contain a mix of letters, numbers, and special characters: $, _, &.</div>   
+      <br>
 
       <!-- Sex selection dropdown -->
       <label for="sex">Sex</label>
@@ -119,54 +125,66 @@
         name="email" 
         required 
         placeholder="example@domain.com" />
-
-      <!-- Error message placeholder for password mismatch -->
-      <div id="error_match" class="error-message">Passwords do not match.</div>
-      <div id="error_invalid" class="error-message">Passwords should be at least 8 characters long and contain a mix of letters, numbers, and special characters.</div>   
-
       <!-- Submit button -->
       <button type="submit">Register</button>
     </form>
   </div>
 
   <script>
-    // JavaScript to ensure password and confirmation match.
+    // Get references to elements
     const form = document.getElementById('registerForm');
     const username = document.registerForm.username;
     const email = document.getElementById('email');
     const password = document.getElementById('password');
     const confirmPassword = document.getElementById('confirmPassword');
-    const error_code_not_match = document.getElementById('error_match');
-    const error_code_invalid = document.getElementById('error_invalid');
+    const errorNotMatch = document.getElementById('error_match');
+    const errorInvalid = document.getElementById('error_invalid');
 
+    // Function to validate password rules and confirm password matching.
+    function validatePasswords() {
+      let valid = true;
+      
+      // Check if password meets the criteria:
+      if(password.value.length < 8 || 
+         !/[a-z]/.test(password.value) ||
+         !/[0-9]/.test(password.value) ||
+         !/[$&_]/.test(password.value)) {
+        errorInvalid.style.display = 'block';
+        valid = false;
+      } else {
+        errorInvalid.style.display = 'none';
+      }
 
+      // Check if password and confirmation match.
+      if(password.value !== confirmPassword.value) {
+        errorNotMatch.style.display = 'block';
+        valid = false;
+      } else {
+        errorNotMatch.style.display = 'none';
+      }
+      return valid;
+    }
+
+    // Validate password when the user leaves the confirmation box.
+    confirmPassword.addEventListener('blur', validatePasswords);
+
+    // Also, for real-time feedback, you can validate on input.
+    confirmPassword.addEventListener('input', function() {
+      if(password.value === confirmPassword.value) {
+        errorNotMatch.style.display = 'none';
+      }
+    });
+
+    // Keep a minimal check on form submission (fields not empty, and password validations pass)
     form.addEventListener('submit', function(event) {
       if (username.value === '' || email.value === '' || password.value === '' || confirmPassword.value === '') {
         event.preventDefault(); // Prevent form submission if any field is empty
         alert('Please fill in all fields.');
         return;
       }
-
-      if(password.value.length < 8 || !/[a-z]/.test(password.value) ||
-       !/[0-9]/.test(password.value) || !/[$&_]/.test(password.value)) {
+      // If validatePasswords returns false, stop the submission.
+      if(!validatePasswords()) {
         event.preventDefault();
-        error_code_invalid.style.display = 'block';
-        return;
-      } else {
-        error_code_invalid.style.display = 'none';
-      }
-
-      if (password.value !== confirmPassword.value && password.value !== '' && confirmPassword.value !== '') {
-        event.preventDefault(); // Prevent form submission
-        error_code_not_match.style.display = 'block';
-      } else {
-        error_code_not_match.style.display = 'none';
-      }
-    });
-
-    confirmPassword.addEventListener('input', function() {
-      if (password.value === confirmPassword.value) {
-        error_code_not_match.style.display = 'none';
       }
     });
   </script>
