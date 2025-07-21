@@ -190,6 +190,8 @@
   <!-- Navigation Button -->
   <div style="text-align:center; margin-top:20px;">
     <button onclick="window.location.href='index.html'">Go to Index Page</button>
+    <button id="edit-profile-btn" onclick="toggleEditMode(true)">Edit Profile</button>
+    <button id="submit-btn" style="display: none;" onclick="submitChanges()">Submit</button>
   </div>
   
   <!-- Footer -->
@@ -249,6 +251,46 @@
       displayElem.style.display = "inline-block";
       errorElem.textContent = "";
     }
+
+    // Toggle edit mode for all fields
+    function toggleEditMode(enable) {
+      const editIcons = document.querySelectorAll('.edit-icon');
+      const submitBtn = document.getElementById('submit-btn');
+      const editProfileBtn = document.getElementById('edit-profile-btn');
+
+      if (enable) {
+        // Show edit icons and submit button, hide edit profile button
+        editIcons.forEach(icon => icon.style.display = 'inline-block');
+        submitBtn.style.display = 'inline-block';
+        editProfileBtn.style.display = 'none';
+      } else {
+        // Hide edit icons and submit button, show edit profile button
+        editIcons.forEach(icon => icon.style.display = 'none');
+        submitBtn.style.display = 'none';
+        editProfileBtn.style.display = 'inline-block';
+        // Hide all input fields and show display values
+        document.querySelectorAll('.edit-input').forEach(input => {
+          input.style.display = 'none';
+        });
+        document.querySelectorAll('.edit-display').forEach(display => {
+          display.style.display = 'inline-block';
+        });
+      }
+    }
+
+    // Submit changes and exit edit mode
+    function submitChanges() {
+      // Save all fields (optional: validate before submission)
+      const fields = ['username', 'email', 'sex', 'age', 'address', 'city', 'postcode', 'hobbies'];
+      fields.forEach(field => {
+        if (document.getElementById(`${field}-input`)) {
+          saveField(field);
+        }
+      });
+      // Exit edit mode
+      toggleEditMode(false);
+    }
+
 
     // Toggle edit mode for a given field.
     function toggleEdit(field) {
