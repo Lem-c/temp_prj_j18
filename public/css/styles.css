@@ -1,0 +1,83 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styles */
+header {
+    background-color: #004466;
+    color: #f0f0f0;
+    padding: 20px 10px;
+    text-align: center;
+}
+
+/* Main Content */
+main {
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 0 20px;
+}
+
+/* Section Titles */
+h2, h3 {
+    color: #004466;
+    margin-bottom: 10px;
+}
+
+/* User List */
+#user-list {
+    list-style-type: none;
+    padding: 0;
+}
+#user-list li {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+}
+
+/* Form Styles */
+form {
+    background-color: #ffffff;
+    padding: 15px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    max-width: 400px;
+    margin: 20px 0;
+}
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #004466;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+form button:hover {
+    background-color: #00334d;
+}
+
+/* Footer (optional) */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #004466;
+    color: #f0f0f0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}

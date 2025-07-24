@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node REST SQL Test</title>
+  <!-- Link to your external decorated CSS style -->
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <header>
+    <h1>Welcome to Node REST SQL Test</h1>
+    <p>This is a simple REST API test using Node.js and PostgreSQL.</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Movie List</h2>
+
+      <input type="text" id="search-box" placeholder="Search movies..." />
+
+      <ul id="user-list">
+        <!-- User list will be populated here -->
+      </ul>
+    </section>
+
+    <section>
+      <h3>Append 1 Movie</h3>
+      <form id="add-user-form">
+        <input type="text" id="username" placeholder="Enter movie name" required>
+        <input type="text" id="password" placeholder="Enter date" required>
+        <button type="submit">Add A Movie</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- JavaScript to fetch and add users -->
+  <script>
+    // Global variable to store all movies/users
+    let allUsers = [];
+
+    // Separate function to render the list
+    function renderUsers(users) {
+      const userList = document.getElementById('user-list');
+      userList.innerHTML = '';
+      users.forEach(user => {
+        const li = document.createElement('li');
+        li.style.display = 'flex';
+        li.style.justifyContent = 'space-between';
+        li.style.alignItems = 'center';
+        li.style.padding = '5px 0';
+
+        // Left side: user info
+        const info = document.createElement('span');
+        let formattedDate = user.password;
+        const date = new Date(user.password);
+        if (!isNaN(date.getTime())) {
+          formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+            .toString()
+            .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+        }
+        info.textContent = `ID: ${user.id} - ${user.username} : ${formattedDate}`;
+
+        // Right side: buttons container (update and delete buttons, unchanged)
+        const buttonContainer = document.createElement('div');
+
+        const updateBtn = document.createElement('button');
+        updateBtn.style.background = 'url("icon/edit.png") no-repeat center';
+        updateBtn.style.backgroundSize = 'contain';
+        updateBtn.style.border = 'none';
+        updateBtn.style.width = '32px';
+        updateBtn.style.height = '32px';
+        updateBtn.style.marginRight = '10px';
+        updateBtn.addEventListener('click', () => {
+          updateUserList(user.id, user.username, user.password);
+        });
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.style.background = 'url("icon/delete.png") no-repeat center';
+        deleteBtn.style.backgroundSize = 'contain';
+        deleteBtn.style.border = 'none';
+        deleteBtn.style.width = '32px';
+        deleteBtn.style.height = '32px';
+        deleteBtn.addEventListener('click', () => {
+          deleteUser(user.id);
+        });
+
+        buttonContainer.appendChild(updateBtn);
+        buttonContainer.appendChild(deleteBtn);
+
+        li.appendChild(info);
+        li.appendChild(buttonContainer);
+
+        userList.appendChild(li);
+      });
+    }
+
+    // Fetch and display current users
+    function fetchUsers() {
+        fetch('/api/get-users')
+        .then(response => response.json())
+        .then(data => {
+          allUsers = data; // Store fetched users globally
+          renderUsers(allUsers);
+        })
+        .catch(error => console.error('Error fetching users:', error));
+    }
+
+    // Attach event listener to search box to filter results as the user types
+    document.getElementById('search-box').addEventListener('input', function () {
+      const keyword = this.value.trim().toLowerCase();
+      const filteredUsers = allUsers.filter(user =>
+        user.username.toLowerCase().includes(keyword)
+      );
+      renderUsers(filteredUsers);
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // Call fetchUsers on page load
+      fetchUsers();
+
+      // Handle Add User Form submission
+      document.getElementById('add-user-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+      
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+      
+        if (!username || !password) {
+          alert('Please enter both username and password.');
+          return;
+        }
+      
+        fetch('/api/add-users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Optionally, display a success message:
+            console.log('User added successfully:', data);
+            // Refresh user list after successful addition
+            fetchUsers();
+            // Clear form fields
+            document.getElementById('add-user-form').reset();
+          })
+          .catch(error => {
+            console.error('Error adding user:', error);
+          });
+      });
+    });
+
+    // function to update user list
+    function updateUserList(userId, currentName, currentDate) {
+        let formattedDate = currentDate;
+        if (currentDate) {
+            const dateObj = new Date(currentDate);
+            if (!isNaN(dateObj.getTime())) {
+            formattedDate = `${dateObj.getFullYear()}-${(dateObj.getMonth() + 1)
+                .toString()
+                .padStart(2, '0')}-${dateObj.getDate().toString().padStart(2, '0')}`;
+            }
+        }
+
+        Swal.fire({
+            title: 'Edit Movie Details',
+            html:
+            `<input id="swal-input1" class="swal2-input" placeholder="New Username" value="${currentName}">` +
+            `<input id="swal-input2" class="swal2-input" placeholder="New Date (yyyy-mm-dd)" value="${formattedDate}">`,
+            focusConfirm: false,
+            preConfirm: () => {
+            const newName = document.getElementById('swal-input1').value;
+            const newDate = document.getElementById('swal-input2').value;
+            if (!newName || !newDate) {
+                Swal.showValidationMessage('Both fields are required');
+                return false;
+            }
+            return { newName, newDate };
+            }
+        }).then((result) => {
+            if (result.value) {
+            const { newName, newDate } = result.value;
+            fetch(`/api/users/${userId}`, {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                username: newName,
+                password: newDate
+                })
+            })
+            .then(() => fetchUsers())
+            .catch(error => console.error('Error updating user:', error));
+            }
+        });
+        }
+
+    // function to delete user
+    function deleteUser(userId) {
+      fetch(`/api/users/${userId}`, {
+        method: 'DELETE'
+      })
+        .then(() => fetchUsers())
+        .catch(error => {
+          console.error('Error deleting user:', error);
+        });
+    }
+  </script>
+</body>
+</html>
